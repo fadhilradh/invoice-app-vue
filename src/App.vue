@@ -2,8 +2,10 @@
   <div>
     <div v-if="!mobile" class="app flex flex-column">
       <Navigation />
-      <div class="app-content flex flex-column">
-        <InvoiceModal />
+      <div class="app-content flex">
+        <transition name="invoice">
+          <InvoiceModal v-show="invoiceModal" />
+        </transition>
         <router-view />
       </div>
     </div>
@@ -17,6 +19,7 @@
 <script>
 import Navigation from "./components/Navigation.vue";
 import InvoiceModal from "./components/InvoiceModal.vue";
+import { mapState } from "vuex";
 export default {
   components: {
     Navigation,
@@ -37,6 +40,9 @@ export default {
       this.mobile = false;
     },
   },
+  computed: {
+    ...mapState(["invoiceModal"]),
+  },
   created() {
     this.checkScreen();
     window.addEventListener("resize", this.checkScreen);
@@ -56,7 +62,7 @@ export default {
 }
 
 .app {
-  background-color: #141625;
+  background-color: #141625 !important;
   min-height: 100vh;
   flex-direction: column;
 
@@ -69,6 +75,7 @@ export default {
   padding: 0 20px;
   flex: 1;
   position: relative;
+  background-color: #141625 !important;
 }
 
 .mobile-message {
@@ -82,6 +89,18 @@ export default {
   p {
     margin-top: 16px;
   }
+}
+
+// animated invoiceModal
+
+.invoice-enter-active,
+.invoice-leave-active {
+  transition: 0.8s ease all;
+}
+
+.invoice-leave-to,
+.invoice-enter-from {
+  transform: translateX(-700px);
 }
 
 button,
