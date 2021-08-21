@@ -35,6 +35,8 @@ header {
   }
 
   img {
+    background-color: #7c5dfa;
+
     width: auto;
     height: 30px;
   }
