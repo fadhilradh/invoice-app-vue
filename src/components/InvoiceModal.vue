@@ -1,6 +1,6 @@
 <template>
   <div
-    @click="checkClick"
+    @click="checkClickLocation"
     ref="invoiceWrap"
     class="invoice-wrap flex flex-column"
   >
@@ -239,7 +239,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["TOGGLE_INVOICE_MODAL"]),
+    ...mapMutations(["TOGGLE_INVOICE_MODAL", "TOGGLE_INVOICE_CLOSE_MODAL"]),
     addNewInvoiceItem() {
       this.invoiceItemList.push({
         id: uid(),
@@ -254,6 +254,11 @@ export default {
       this.invoiceItemList.forEach((item) => {
         this.invoiceTotal + item.total;
       });
+    },
+    checkClickLocation(e) {
+      if (e.target === this.$refs.invoiceWrap) {
+        this.TOGGLE_INVOICE_CLOSE_MODAL();
+      }
     },
     closeInvoice() {
       this.TOGGLE_INVOICE_MODAL();
