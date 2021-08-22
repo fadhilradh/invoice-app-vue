@@ -5,6 +5,7 @@
     class="invoice-wrap flex flex-column"
   >
     <form @submit.prevent="submitForm" class="invoice-content">
+      <Loading v-show="loading" />
       <h1>New Invoice</h1>
       <!-- Bill From -->
       <div class="bill-from flex flex-column">
@@ -112,7 +113,8 @@
           <div class="input flex flex-column">
             <label for="paymentDueDate">Payment Due Date</label>
             <input
-              type="text required"
+              type="text "
+              required
               id="paymentDueDate"
               v-model="paymentDueDate"
               disabled
@@ -122,7 +124,7 @@
 
         <div class="input flex flex-column">
           <label for="paymentTerms">Payment Terms</label>
-          <select type="text required" id="paymentTerms" v-model="paymentTerms">
+          <select required id="paymentTerms" v-model="paymentTerms">
             <option value="30">Net 30 Days</option>
             <option value="60">Net 60 Days</option>
           </select>
@@ -131,10 +133,10 @@
         <div class="input flex flex-column">
           <label for="productDescription">Product Description</label>
           <input
-            type="text required"
+            type="text"
+            required
             id="productDescription"
             v-model="productDescription"
-            disabled
           />
         </div>
       </div>
@@ -182,12 +184,16 @@
         <!-- Save -->
         <div class="save flex">
           <div class="left flex">
-            <button @click="closeInvoice" class="red">Cancel</button>
+            <button type="button" @click="closeInvoice" class="red">
+              Cancel
+            </button>
           </div>
           <div class="right flex">
-            <button @click="saveDraft" class="dark-purple">Save Draft</button>
-            <button @click="publishInvoice" class="purple">
-              Publish Invoice
+            <button type="submit" @click="saveDraft" class="dark-purple">
+              Save Draft
+            </button>
+            <button type="submit" @click="publishInvoice" class="purple">
+              Create Invoice
             </button>
           </div>
         </div>
@@ -200,10 +206,15 @@
 import db from "../firebase/firebase";
 import { mapMutations } from "vuex";
 import { uid } from "uid";
+import Loading from "../components/Loading.vue";
 export default {
   name: "invoiceModal",
+  components: {
+    Loading,
+  },
   data() {
     return {
+      loading: false,
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
       billerStreetAddress: null,
       billerCity: null,
@@ -224,7 +235,7 @@ export default {
       invoicePending: null,
       invoiceDraft: null,
       invoiceItemList: [],
-      invoiceTotal: 0,
+      invoiceTotal: null,
     };
   },
   methods: {
@@ -263,6 +274,7 @@ export default {
         alert("Please ensure you fill out work items!");
         return;
       }
+      this.loading = true;
       this.calInvoiceTotal();
       const database = db.collection("invoices").doc(); //create new collection (db) and document (table)
       await database.set({
@@ -289,10 +301,11 @@ export default {
         invoiceTotal: this.invoiceTotal,
         invoicePaid: null,
       });
+      this.loading = false;
       this.TOGGLE_INVOICE_MODAL();
     },
     submitForm() {
-      this.uploadInvoice;
+      this.uploadInvoice();
     },
   },
   created() {
