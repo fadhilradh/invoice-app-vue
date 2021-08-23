@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="invoicesLoaded">
     <div v-if="!mobile" class="app flex flex-column">
       <Navigation />
       <div class="app-content flex">
@@ -45,7 +45,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["invoiceModal", "invoiceCloseModal"]),
+    ...mapState(["invoiceModal", "invoiceCloseModal", "invoicesLoaded"]),
   },
   created() {
     this.checkScreen();

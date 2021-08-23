@@ -7,6 +7,7 @@ export default createStore({
     invoiceModal: null,
     invoiceCloseModal: null,
     invoicesLoaded: null,
+    currentInvoiceArrays: [],
   },
   mutations: {
     TOGGLE_INVOICE_MODAL(state) {
@@ -20,7 +21,7 @@ export default createStore({
       console.log("state.invoice", state.invoices);
     },
     INVOICE_LOADED(state) {
-      state.invoicesLoaded = false;
+      state.invoicesLoaded = true;
     },
   },
   actions: {
