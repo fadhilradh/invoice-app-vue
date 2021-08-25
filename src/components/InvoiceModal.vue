@@ -245,15 +245,16 @@ export default {
         id: uid(),
         itemName: "",
         qty: "",
-        price: 0,
+        price: "",
         total: 0,
       });
     },
     calInvoiceTotal() {
       this.invoiceTotal = 0;
       this.invoiceItemList.forEach((item) => {
-        this.invoiceTotal + item.total;
+        this.invoiceTotal += item.total;
       });
+      console.log("totalling");
     },
     checkClickLocation(e) {
       if (e.target === this.$refs.invoiceWrap) {
